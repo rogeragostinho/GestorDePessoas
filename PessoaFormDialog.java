@@ -5,25 +5,27 @@ import java.awt.event.*;
 public abstract class PessoaFormDialog extends JDialog
 {
 	protected Pessoa pessoa;
-	private JTextField textFieldNome;
-	private JTextField textFieldIdade;
+	protected JTextField textFieldNome;
+	protected JTextField textFieldIdade;
 	private JButton buttonAdicionarPessoa;
 
-	public PessoaFormDialog(JFrame own, String titulo)
+	public PessoaFormDialog(JFrame own, String titulo, Pessoa pessoa)
 	{
 		super(own, titulo);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setSize(400, 400);
+
 		setLayout(new GridLayout(5, 1));
 
+		this.pessoa = pessoa;
 		initComponents();
 		addListeners();
 	}
 
 	public void initComponents()
 	{
-		//initTextFields();
-		textFieldNome = new JTextField(6);
-		textFieldIdade = new JTextField(6);
-
+		initTextFields();
+		
 		buttonAdicionarPessoa = new JButton("Adicionar");
 
 		add(new JLabel("Nome: "));
@@ -33,10 +35,11 @@ public abstract class PessoaFormDialog extends JDialog
 		add(buttonAdicionarPessoa);
 	}
 
-	/*public void initTextFields()
+	public void initTextFields()
 	{
-		
-	}*/
+		textFieldNome = new JTextField(6);
+		textFieldIdade = new JTextField(6);
+	}
 
 	public void addListeners()
 	{
@@ -44,8 +47,26 @@ public abstract class PessoaFormDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				JOptionPane.showMessageDialog(null, "e.getMessage()");
+
 				String nome = textFieldNome.getText();
-				int idade = Integer.parseInt(textFieldIdade.getText());
+
+				int idade = 0;
+
+
+				try
+				{
+					System.out.println("linha 1");
+				//	idade = Integer.parseInt(textFieldIdade.getText());	
+					idade = Integer.parseInt();	
+					System.out.println("linha 2");
+				}
+				catch(NumberFormatException e)
+				{
+					System.out.println("linha 3");
+					JOptionPane.showMessageDialog(null, "e.getMessage()");
+					return;
+				}
 
 				pessoa.setNome(nome);
 				pessoa.setIdade(idade);

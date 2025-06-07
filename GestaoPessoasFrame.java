@@ -25,7 +25,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	// Declaração das variáveis
 	private JPanel panelNorth;
 	
-	private JPanel panelNorthWest;
+	private JPanel panelNorthEast;
 	private JButton buttonAdicionarPessoa;
 	private JButton buttonEditarPessoa;
 	private JButton buttonRemoverPessoa;
@@ -50,7 +50,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		setLayout(new BorderLayout());
 
 		//
-		pessoas = new ArrayList<>(){};
+		pessoas = new ArrayList<>();
 		pessoas.add(new Pessoa("Roger", 21));
 		pessoas.add(new Pessoa("Hugo", 20));
 
@@ -66,62 +66,6 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	{
 		initPanelNorth();
 		initPanelCenter();
-
-		// ==== inicio: painelCenter ====
-		/*panelListPessoas = new JPanel(new BorderLayout());
-
-		
-
-		panelListPessoasOptions = new JPanel(new GridLayout(2, 1));
-
-		
-
-		panelListPessoasOptions.add(buttonEditarPessoa);
-		panelListPessoasOptions.add(buttonRemoverPessoa);
-
-		panelListPessoas.add(listPessoas);
-		panelListPessoas.add(panelListPessoasOptions, BorderLayout.EAST);
-		// ==== fim: painelCenter ====
-
-
-		// ==== inicio: painelSouth ====
-		panelSouth = new JPanel(new BorderLayout());
-
-		
-
-			// inicio painel adicionar pessoa
-		panelAdicionarPessoa = new JPanel(new GridLayout(4, 1));		
-
-		panelNome = new JPanel(new FlowLayout());
-
-		textFieldNome = new JTextField(10);
-
-		panelNome.add(new JLabel("Nome"));
-		panelNome.add(textFieldNome);
-
-		panelIdade = new JPanel(new FlowLayout());
-
-		textFieldIdade = new JTextField(10);
-
-		panelIdade.add(new JLabel("Idade"));
-		panelIdade.add(textFieldIdade);
-
-		
-
-		panelAdicionarPessoa.add(new JLabel("Adicionar"));
-			// fim painel adicionar pessoa
-
-		panelAdicionarPessoa.add(panelNome);
-		panelAdicionarPessoa.add(panelIdade);
-		panelAdicionarPessoa.add(buttonAdicionarPessoa);
-
-		panelSouth.add(textArea, BorderLayout.WEST);
-		panelSouth.add(panelAdicionarPessoa/*, BorderLayout.EAST);
-		// ==== fim: painelSouth ====
-
-		// adiciona paineis principais a interface
-		add(panelListPessoas);
-		add(panelSouth, BorderLayout.SOUTH);*/
 	}
 
 	public void initPanelNorth()
@@ -130,15 +74,15 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 
 		buttonAdicionarPessoa = new JButton("Adicionar pessoa");
 
-		panelNorthWest = new JPanel(new FlowLayout());
+		panelNorthEast = new JPanel(new FlowLayout());
 
 		buttonEditarPessoa = new JButton("Editar");
 		buttonRemoverPessoa = new JButton("Remover");
 
-		panelNorth.add(buttonAdicionarPessoa, BorderLayout.EAST);
-		panelNorthWest.add(buttonEditarPessoa);
-		panelNorthWest.add(buttonRemoverPessoa);
-		panelNorth.add(panelNorthWest, BorderLayout.WEST);
+		panelNorth.add(buttonAdicionarPessoa, BorderLayout.WEST);
+		panelNorthEast.add(buttonEditarPessoa);
+		panelNorthEast.add(buttonRemoverPessoa);
+		panelNorth.add(panelNorthEast, BorderLayout.EAST);
 
 		add(panelNorth, BorderLayout.NORTH);
 	}
@@ -147,12 +91,13 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	{
 		panelCenter = new JPanel(new BorderLayout());
 
-		textArea = new JTextArea(10, 20);
+		textArea = new JTextArea("Nenhum registro selecionado" ,10, 20);
+		textArea.setEditable(false);
 
 		listPessoas = new JList<>();
 		listPessoas.setBackground(Color.RED);
 
-		panelCenter.add(textArea, BorderLayout.EAST);
+		panelCenter.add(textArea, BorderLayout.WEST);
 		panelCenter.add(listPessoas);
 
 		add(panelCenter);
@@ -163,6 +108,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		buttonAdicionarPessoa.addActionListener(this);
 		listPessoas.addListSelectionListener(this);
 		buttonRemoverPessoa.addActionListener(this);
+		buttonEditarPessoa.addActionListener(this);
 	}
 	// Fim da configuração dos componentes
 
@@ -181,6 +127,25 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 					adicionarPessoaNaLista(pessoa);
 				}
 			});
+			adicionarPessoaDialog.setVisible(true);
+		}
+
+		if (event.getSource() == buttonEditarPessoa)
+		{
+			int index = listPessoas.getSelectedIndex();
+
+			Pessoa pessoa = pessoas.get(index);
+
+			EditarPessoaDialog editarPessoaDialog = new EditarPessoaDialog(this, pessoa);
+			editarPessoaDialog.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosed(WindowEvent e)
+				{
+					//adicionarPessoaNaLista(pessoa);
+					atualizarLista();
+				}
+			});
+			editarPessoaDialog.setVisible(true);
 		}
 
 		if (event.getSource() == buttonRemoverPessoa)
@@ -190,10 +155,16 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	@Override
 	public void valueChanged(ListSelectionEvent event)
 	{
-		textArea.setText(
-			"Nome: " + pessoas.get(listPessoas.getSelectedIndex()).getNome() +
-			"\nIdade: " + pessoas.get(listPessoas.getSelectedIndex()).getIdade()
-		);
+		// tratar esta exceção
+		int index = listPessoas.getSelectedIndex();
+		if (index != -1) {
+			textArea.setText(
+				"Nome: " + pessoas.get(index).getNome() +
+				"\nIdade: " + pessoas.get(index).getIdade()
+			);
+		}
+		else
+			textArea.setText("Nenhum registro selecionado");
 	}
 
 	/*private void adicionarPessoa()
@@ -206,6 +177,12 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	}*/
 
 	private void adicionarPessoaNaLista(Pessoa pessoa)
+	{
+		pessoas.add(pessoa);
+		atualizarLista();
+	}
+
+	private void atualizarPessoaNaLista(Pessoa pessoa, int index)
 	{
 		pessoas.add(pessoa);
 		atualizarLista();
