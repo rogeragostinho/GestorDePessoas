@@ -47,24 +47,20 @@ public abstract class PessoaFormDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(null, "e.getMessage()");
+				//JOptionPane.showMessageDialog(null, "e.getMessage()");
 
 				String nome = textFieldNome.getText();
 
 				int idade = 0;
 
-
 				try
 				{
-					System.out.println("linha 1");
-				//	idade = Integer.parseInt(textFieldIdade.getText());	
-					idade = Integer.parseInt();	
-					System.out.println("linha 2");
+					//System.out.println("linha 1");
+					idade = Integer.parseInt(textFieldIdade.getText());	
 				}
-				catch(NumberFormatException e)
+				catch(NumberFormatException ex)
 				{
-					System.out.println("linha 3");
-					JOptionPane.showMessageDialog(null, "e.getMessage()");
+					JOptionPane.showMessageDialog(null, "Digite uma idade válida", "Valor inválido", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 

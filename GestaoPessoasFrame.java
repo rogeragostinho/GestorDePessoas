@@ -1,23 +1,9 @@
-import javax.swing.JFrame;
-//import java.awt.
-//import javax.swing.
-import java.awt.BorderLayout;
-import javax.swing.JList;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-//import java.awt.event.ActionListener;
-//import java.awt.event.ActionEvent;
-import java.awt.Color;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.JOptionPane;
 import java.awt.event.*;
 
 class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelectionListener
@@ -33,13 +19,6 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	private JPanel panelCenter;
 	private JTextArea textArea;
 	private JList<String> listPessoas;
-	
-	/*private JPanel panelListPessoas;
-	private JPanel panelListPessoasOptions;
-	private JPanel panelSouth;
-	private JPanel panelAdicionarPessoa;
-	private JPanel panelNome;
-	private JPanel panelIdade;*/
 
 	private final List<Pessoa> pessoas;
 	// Fim da declaração das variáveis
@@ -177,12 +156,6 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	}*/
 
 	private void adicionarPessoaNaLista(Pessoa pessoa)
-	{
-		pessoas.add(pessoa);
-		atualizarLista();
-	}
-
-	private void atualizarPessoaNaLista(Pessoa pessoa, int index)
 	{
 		pessoas.add(pessoa);
 		atualizarLista();
