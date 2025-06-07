@@ -1,17 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-abstract class PessoaFormaDialog extends JDialog
+public abstract class PessoaFormDialog extends JDialog
 {
-	private Pessoa pessoa;
+	protected Pessoa pessoa;
 	private JTextField textFieldNome;
 	private JTextField textFieldIdade;
 	private JButton buttonAdicionarPessoa;
 
-	public PessoaFormaDialog(JFrame own, String titulo, Pessoa pessoa)
+	public PessoaFormDialog(JFrame own, String titulo)
 	{
 		super(own, titulo);
-		this.pessoa = pessoa;
 		setLayout(new GridLayout(5, 1));
 
 		initComponents();
@@ -20,9 +20,11 @@ abstract class PessoaFormaDialog extends JDialog
 
 	public void initComponents()
 	{
+		//initTextFields();
 		textFieldNome = new JTextField(6);
-		
 		textFieldIdade = new JTextField(6);
+
+		buttonAdicionarPessoa = new JButton("Adicionar");
 
 		add(new JLabel("Nome: "));
 		add(textFieldNome);
@@ -30,6 +32,11 @@ abstract class PessoaFormaDialog extends JDialog
 		add(textFieldIdade);
 		add(buttonAdicionarPessoa);
 	}
+
+	/*public void initTextFields()
+	{
+		
+	}*/
 
 	public void addListeners()
 	{
