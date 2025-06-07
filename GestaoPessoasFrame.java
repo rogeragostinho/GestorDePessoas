@@ -15,28 +15,38 @@ import java.awt.Color;
 import javax.swing.JTextArea;
 import java.util.List;
 import java.util.ArrayList;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.JOptionPane;
 
-class GestaoPessoasFrame extends JFrame implements
+class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelectionListener
 {
-	private final JList<String> listPessoas;
-	private final JPanel panelListPessoas;
-	private final JPanel panelListPessoasOptions;
-	private final JButton buttonEditarPessoa;
-	private final JButton buttonRemoverPessoa;
+	// Declaração das variáveis
+	private JPanel panelNorth;
+	
+	private JPanel panelNorthWest;
+	private JButton buttonEditarPessoa;
+	private JButton buttonRemoverPessoa;
 
-	// painel south
-	private final JPanel panelSouth;
-	private final JTextArea textArea;
-	private final JPanel panelAdicionarPessoa;
+	private JPanel panelCenter;
+	private JTextArea textArea;
+	private JList<String> listPessoas;
+	
+	private JPanel panelListPessoas;
+	private JPanel panelListPessoasOptions;
+	
 
-	// painel adicionar pessoa
-	private final JTextField textFieldNome;
-	private final JTextField textFieldIdade;
-	private final JButton buttonAdicionarPessoa;
-	private final JPanel panelNome;
-	private final JPanel panelIdade;
+	private JPanel panelSouth;
+	
+	private JPanel panelAdicionarPessoa;
+
+	
+	
+	private JPanel panelNome;
+	private JPanel panelIdade;
 
 	private final List<Pessoa> pessoas;
+	// Fim da declaração das variáveis
 
 	public GestaoPessoasFrame()
 	{
@@ -44,24 +54,36 @@ class GestaoPessoasFrame extends JFrame implements
 		setLayout(new BorderLayout());
 
 		//
-		pessoas = new ArrayList<>();
-		//
+		pessoas = new ArrayList<>(){};
+		pessoas.add(new Pessoa("Roger", 21));
+		pessoas.add(new Pessoa("Hugo", 20));
+
+		initComponents();
+		addListeners();
+		atualizarLista();
+	}
+
+	/**
+	 * Configuração dos componentes
+	 **/
+	public void initComponents()
+	{
+		initPanelNorth();
+		initPanelCenter();
 
 		// ==== inicio: painelCenter ====
-		panelListPessoas = new JPanel(new BorderLayout());
+		/*panelListPessoas = new JPanel(new BorderLayout());
 
-		listPessoas = new JList<>(new String[]{"Roger", "Hugo", "Adão"});
-		listPessoas.setBackground(Color.RED);
+		
 
 		panelListPessoasOptions = new JPanel(new GridLayout(2, 1));
 
-		buttonEditarPessoa = new JButton("Editar");
-		buttonRemoverPessoa = new JButton("Remover");
+		
 
 		panelListPessoasOptions.add(buttonEditarPessoa);
 		panelListPessoasOptions.add(buttonRemoverPessoa);
 
-		panelListPessoas.add(pessoas);
+		panelListPessoas.add(listPessoas);
 		panelListPessoas.add(panelListPessoasOptions, BorderLayout.EAST);
 		// ==== fim: painelCenter ====
 
@@ -69,7 +91,7 @@ class GestaoPessoasFrame extends JFrame implements
 		// ==== inicio: painelSouth ====
 		panelSouth = new JPanel(new BorderLayout());
 
-		textArea = new JTextArea(10, 20);
+		
 
 			// inicio painel adicionar pessoa
 		panelAdicionarPessoa = new JPanel(new GridLayout(4, 1));		
@@ -88,7 +110,7 @@ class GestaoPessoasFrame extends JFrame implements
 		panelIdade.add(new JLabel("Idade"));
 		panelIdade.add(textFieldIdade);
 
-		buttonAdicionarPessoa = new JButton("Adicionar pessoa");
+		
 
 		panelAdicionarPessoa.add(new JLabel("Adicionar"));
 			// fim painel adicionar pessoa
@@ -101,19 +123,70 @@ class GestaoPessoasFrame extends JFrame implements
 		panelSouth.add(panelAdicionarPessoa/*, BorderLayout.EAST*/);
 		// ==== fim: painelSouth ====
 
-		// adiciona paineis principais a interface
+		// adiciona paineis principais a interface*/
 		add(panelListPessoas);
 		add(panelSouth, BorderLayout.SOUTH);
-
-		// eventos
-		buttonAdicionarPessoa.addActionListener(this);
 	}
+
+	public void initPanelNorth()
+	{
+		panelNorth = new JPanel(new BorderLayout());
+
+		buttonAdicionarPessoa = new JButton("Adicionar pessoa");
+
+		panelNorthWest = new JPanel(new FlowLayout();
+
+		buttonEditarPessoa = new JButton("Editar");
+		buttonRemoverPessoa = new JButton("Remover");
+
+		panelNorth.add(buttonAdicionarPessoa, BorderLayout.EAST);
+		panelNorthWest.add(buttonEditarPessoa);
+		panelNorthWest.add(buttonRemoverPessoa);
+		panelNorth.add(panelNorthWest, BorderLayout.WEST);
+
+		add(panelNorth, BorderLayout.NORTH);
+	}
+
+	public void initPanelCenter()
+	{
+		panelCenter = new JPanel(new BorderLayout());
+
+		textArea = new JTextArea(10, 20);
+
+		listPessoas = new JList<>();
+		listPessoas.setBackground(Color.RED);
+
+		panelCenter.add(textArea, BorderLayout.EAST);
+		panelCenter.add(listPessoas);
+
+		add(panelCenter);
+	}
+
+	public void addListeners()
+	{
+		buttonAdicionarPessoa.addActionListener(this);
+		listPessoas.addListSelectionListener(this);
+		buttonRemoverPessoa.addActionListener(this);
+	}
+	// Fim da configuração dos componentes
 
 	@Override
 	public void actionPerformed(ActionEvent event)
 	{
 		if (event.getSource() == buttonAdicionarPessoa)
 			adicionarPessoa();
+
+		if (event.getSource() == buttonRemoverPessoa)
+			removerPessoa(listPessoas.getSelectedIndex());
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent event)
+	{
+		textArea.setText(
+			"Nome: " + pessoas.get(listPessoas.getSelectedIndex()).getNome() +
+			"\nIdade: " + pessoas.get(listPessoas.getSelectedIndex()).getIdade()
+		);
 	}
 
 	private void adicionarPessoa()
@@ -127,16 +200,24 @@ class GestaoPessoasFrame extends JFrame implements
 
 	private void adicionarPessoaNaLista(Pessoa pessoa)
 	{
-
+		pessoas.add(pessoa);
+		atualizarLista();
 	}
 
 	private void atualizarLista()
 	{
-		// estou a criar a logica para atualizar as listas de acordo com pessoas
-		for (Pessoa pessoa: pessoas)
-		{
-			if (!listPessoas.contains(pessoa.getNome()))
-				listPessoas.add(pessoa.getNome());
-		}
+		String[] nomes = new String[pessoas.size()];
+
+		for (int i = 0; i < pessoas.size(); i++)
+			nomes[i] = pessoas.get(i).getNome();
+
+		listPessoas.setListData(nomes);
+	}
+
+	private void removerPessoa(int index)
+	{
+		//JOptionPane.showMessageDialog(null, index);
+		pessoas.remove(index);
+		atualizarLista();
 	}
 }

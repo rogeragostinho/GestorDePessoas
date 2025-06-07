@@ -13,7 +13,7 @@ class Pessoa
 	{
 		this.nome = nome;
 	}
-	public String get()
+	public String getNome()
 	{
 		return this.nome;
 	}
@@ -22,7 +22,7 @@ class Pessoa
 	{
 		this.idade = idade;
 	}
-	public int get()
+	public int getIdade()
 	{
 		return this.idade;
 	}
