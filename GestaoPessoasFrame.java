@@ -28,7 +28,6 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		super("Gestor de Pessoas");
 		setLayout(new BorderLayout());
 
-		//
 		pessoas = new ArrayList<>();
 		pessoas.add(new Pessoa("Roger", 21));
 		pessoas.add(new Pessoa("Hugo", 20));
@@ -49,7 +48,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 
 	public void initPanelNorth()
 	{
-		panelNorth = new JPanel(new BorderLayout());
+		panelNorth = new JPanel(new BorderLayout(70, 70));
 
 		buttonAdicionarPessoa = new JButton("Adicionar pessoa");
 
@@ -97,8 +96,9 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		if (event.getSource() == buttonAdicionarPessoa)
 		{
 			Pessoa pessoa = new Pessoa(" ", 0);
-		//	adicionarPessoa();
+
 			AdicionarPessoaDialog adicionarPessoaDialog = new AdicionarPessoaDialog(this, pessoa);
+
 			adicionarPessoaDialog.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent e)
@@ -106,6 +106,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 					adicionarPessoaNaLista(pessoa);
 				}
 			});
+
 			adicionarPessoaDialog.setVisible(true);
 		}
 
@@ -113,17 +114,27 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		{
 			int index = listPessoas.getSelectedIndex();
 
-			Pessoa pessoa = pessoas.get(index);
+			Pessoa pessoa = null;
+			try
+			{
+				pessoa = pessoas.remove(index);
+			}
+			catch (IndexOutOfBoundsException e)
+			{
+				JOptionPane.showMessageDialog(null, "Selecione um registo", "Nenhuma seleção", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 
 			EditarPessoaDialog editarPessoaDialog = new EditarPessoaDialog(this, pessoa);
+
 			editarPessoaDialog.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent e)
 				{
-					//adicionarPessoaNaLista(pessoa);
 					atualizarLista();
 				}
 			});
+
 			editarPessoaDialog.setVisible(true);
 		}
 
@@ -146,15 +157,6 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 			textArea.setText("Nenhum registro selecionado");
 	}
 
-	/*private void adicionarPessoa()
-	{
-		String nome = textFieldNome.getText();
-		int idade = Integer.parseInt(textFieldIdade.getText());
-
-		// adiciona Pessoa em pessoas e posteriormente em listPessoas
-		adicionarPessoaNaLista(new Pessoa(nome, idade));
-	}*/
-
 	private void adicionarPessoaNaLista(Pessoa pessoa)
 	{
 		pessoas.add(pessoa);
@@ -173,8 +175,16 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 
 	private void removerPessoa(int index)
 	{
-		//JOptionPane.showMessageDialog(null, index);
-		pessoas.remove(index);
+		try
+		{
+			pessoas.remove(index);
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			JOptionPane.showMessageDialog(null, "Selecione um registo", "Nenhuma seleção", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
 		atualizarLista();
 	}
 }

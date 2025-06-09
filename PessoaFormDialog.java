@@ -11,15 +11,16 @@ public abstract class PessoaFormDialog extends JDialog
 
 	public PessoaFormDialog(JFrame own, String titulo, Pessoa pessoa)
 	{
-		super(own, titulo);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setSize(400, 400);
-
+		super(own, titulo, true);
 		setLayout(new GridLayout(5, 1));
 
 		this.pessoa = pessoa;
 		initComponents();
 		addListeners();
+
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setSize(400, 400);
+		setLocationRelativeTo(own);
 	}
 
 	public void initComponents()
