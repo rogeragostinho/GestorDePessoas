@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
 
 class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelectionListener
 {
 	// Declaração das variáveis
+	private JPanel panelMain;
 	private JPanel panelNorth;
 	
 	private JPanel panelNorthEast;
@@ -26,7 +28,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	public GestaoPessoasFrame()
 	{
 		super("Gestor de Pessoas");
-		setLayout(new BorderLayout());
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
 		// teste
 		pessoas = new ArrayList<>();
@@ -50,43 +52,70 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	 **/
 	public void initComponents()
 	{
+		panelMain = new JPanel(new BorderLayout());
+		panelMain.setBorder(new EmptyBorder(15, 15, 15, 15));
+
 		initPanelNorth();
 		initPanelCenter();
+
+		add(panelMain);
 	}
 
 	public void initPanelNorth()
 	{
-		panelNorth = new JPanel(new BorderLayout(70, 70));
+		panelNorth = new JPanel();
+		panelNorth.setLayout(new BoxLayout(panelNorth, BoxLayout.X_AXIS));
 
 		buttonAdicionarPessoa = new JButton("Adicionar pessoa");
 
-		panelNorthEast = new JPanel(new FlowLayout());
-
 		buttonEditarPessoa = new JButton("Editar");
 		buttonRemoverPessoa = new JButton("Remover");
+		desabilitarButtons();
 
-		panelNorth.add(buttonAdicionarPessoa, BorderLayout.WEST);
-		panelNorthEast.add(buttonEditarPessoa);
-		panelNorthEast.add(buttonRemoverPessoa);
-		panelNorth.add(panelNorthEast, BorderLayout.EAST);
+		panelNorth.add(buttonAdicionarPessoa);
+		panelNorth.add(Box.createGlue());
+		panelNorth.add(buttonEditarPessoa);
+		panelNorth.add(Box.createHorizontalStrut(5));
+		panelNorth.add(buttonRemoverPessoa);
 
-		add(panelNorth, BorderLayout.NORTH);
+		panelNorth.setBorder(new EmptyBorder(0, 0, 7, 0));
+
+		panelMain.add(panelNorth, BorderLayout.NORTH);
 	}
 
 	public void initPanelCenter()
 	{
-		panelCenter = new JPanel(new BorderLayout());
+		GridBagLayout layout = new GridBagLayout();
+		panelCenter = new JPanel(layout);
 
-		textArea = new JTextArea("Nenhum registro selecionado" ,10, 20);
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.CENTER;
+
+		// textarea
+		textArea = new JTextArea("Nenhum registro selecionado" ,10, 10);
 		textArea.setEditable(false);
+		textArea.setBorder(new EmptyBorder(5, 7, 7, 5));	
 
+		layout.setConstraints(textArea, constraints);
+		panelCenter.add(textArea);
+
+		// list
 		listPessoas = new JList<>();
-		listPessoas.setBackground(Color.RED);
-
-		panelCenter.add(textArea, BorderLayout.WEST);
+		listPessoas.setBorder(new EmptyBorder(5, 7, 7, 5));
+		listPessoas.setPreferredSize(textArea.getPreferredSize());
+		
+		constraints.insets = new Insets(0, 7, 0, 0);
+		layout.setConstraints(listPessoas, constraints);
 		panelCenter.add(listPessoas);
+		//
 
-		add(panelCenter);
+		panelMain.add(panelCenter);
 	}
 
 	public void addListeners()
@@ -155,14 +184,20 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 	{
 		// tratar esta exceção
 		int index = listPessoas.getSelectedIndex();
-		if (index != -1) {
+		if (index != -1) 
+		{
 			textArea.setText(
 				"Nome: " + pessoas.get(index).getNome() +
 				"\nIdade: " + pessoas.get(index).getIdade()
 			);
+			habilitarButtons();
 		}
 		else
+		{
 			textArea.setText("Nenhum registro selecionado");
+			desabilitarButtons();
+		}
+			
 	}
 
 	private void adicionarPessoaNaLista(Pessoa pessoa)
@@ -200,5 +235,17 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		}
 		
 		atualizarLista();
+	}
+
+	private void habilitarButtons()
+	{
+		buttonEditarPessoa.setEnabled(true);
+		buttonRemoverPessoa.setEnabled(true);
+	}
+
+	private void desabilitarButtons()
+	{
+		buttonEditarPessoa.setEnabled(false);
+		buttonRemoverPessoa.setEnabled(false);
 	}
 }

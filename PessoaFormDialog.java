@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.EmptyBorder;
 
 public abstract class PessoaFormDialog extends JDialog
 {
@@ -35,17 +36,20 @@ public abstract class PessoaFormDialog extends JDialog
 		panelCenter = new JPanel();
 		panelCenter.setLayout(layout);
 
-		labelNome = new JLabel("Nome: ");
-		labelIdade = new JLabel("Idade: ");
+		labelNome = new JLabel("Nome");
+		labelIdade = new JLabel("Idade");
 
 		initTextFields();
 		initButton();
 
-		addComponent(labelNome, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0);
+		textFieldNome.setBorder(new EmptyBorder(4, 5, 4, 5));
+		textFieldIdade.setBorder(new EmptyBorder(4, 5, 4, 5));
+
+		addComponent(labelNome, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0, new Insets(0, 0, 3, 0));
 
 		addComponent(textFieldNome, GridBagConstraints.CENTER, GridBagConstraints.BOTH, GridBagConstraints.REMAINDER, 1);
 
-		addComponent(labelIdade, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0, new Insets(15, 0, 0, 0));
+		addComponent(labelIdade, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0, new Insets(15, 0, 3, 0));
 	
 		addComponent(textFieldIdade, GridBagConstraints.CENTER, GridBagConstraints.BOTH, GridBagConstraints.REMAINDER, 1, new Insets(0, 0, 0, 0));
 
