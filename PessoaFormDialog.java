@@ -28,6 +28,7 @@ public abstract class PessoaFormDialog extends JDialog
 		setLocationRelativeTo(own);
 	}
 
+	// Configuração dos componentes
 	public void initComponents()
 	{
 		GridBagLayout layout = new GridBagLayout();
@@ -87,6 +88,7 @@ public abstract class PessoaFormDialog extends JDialog
 	public abstract void initTextFields();
 
 	public abstract void initButton();
+	// Fim da Configuração dos componentes
 
 	public void addListeners()
 	{
