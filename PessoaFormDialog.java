@@ -100,8 +100,6 @@ public abstract class PessoaFormDialog extends JDialog
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//JOptionPane.showMessageDialog(null, "e.getMessage()");
-
 				String nome = textFieldNome.getText();
 
 				int idade = 0;
