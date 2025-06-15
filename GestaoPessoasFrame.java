@@ -28,13 +28,21 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		super("Gestor de Pessoas");
 		setLayout(new BorderLayout());
 
+		// teste
 		pessoas = new ArrayList<>();
 		pessoas.add(new Pessoa("Roger", 21));
 		pessoas.add(new Pessoa("Hugo", 20));
+		//
 
 		initComponents();
 		addListeners();
-		atualizarLista();
+		atualizarLista(); // teste
+
+		// define as propriedades da janela
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(600, 400);
+		setLocationRelativeTo(null);
+		setMinimumSize(new Dimension(400, 200));
 	}
 
 	/**
@@ -117,7 +125,7 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 			Pessoa pessoa = null;
 			try
 			{
-				pessoa = pessoas.remove(index);
+				pessoa = pessoas.get(index);
 			}
 			catch (IndexOutOfBoundsException e)
 			{
@@ -170,7 +178,13 @@ class GestaoPessoasFrame extends JFrame implements ActionListener, ListSelection
 		for (int i = 0; i < pessoas.size(); i++)
 			nomes[i] = pessoas.get(i).getNome();
 
+		// pega o index do registo selecionado para voltar a selecionar depois de atualizar a lista
+		int index = listPessoas.getSelectedIndex();
+
 		listPessoas.setListData(nomes);
+
+		// Reseleciona o index anterior selecionado
+		listPessoas.setSelectedIndex(index);
 	}
 
 	private void removerPessoa(int index)

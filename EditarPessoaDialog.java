@@ -13,4 +13,10 @@ public class EditarPessoaDialog extends PessoaFormDialog
 		textFieldNome = new JTextField(pessoa.getNome(), 6);
 		textFieldIdade = new JTextField(Integer.toString(pessoa.getIdade()), 6);
 	}
+
+	@Override
+	public void initButton()
+	{
+		buttonPessoa = new JButton("Editar");
+	}
 }

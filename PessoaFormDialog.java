@@ -9,7 +9,7 @@ public abstract class PessoaFormDialog extends JDialog
 	private JLabel labelIdade;
 	protected JTextField textFieldNome;
 	protected JTextField textFieldIdade;
-	private JButton buttonAdicionarPessoa;
+	protected JButton buttonPessoa;
 	private JPanel panelCenter;
 
 	public PessoaFormDialog(JFrame own, String titulo, Pessoa pessoa)
@@ -24,6 +24,7 @@ public abstract class PessoaFormDialog extends JDialog
 
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setSize(300, 200);
+		setResizable(false);
 		setLocationRelativeTo(own);
 	}
 
@@ -33,73 +34,63 @@ public abstract class PessoaFormDialog extends JDialog
 		panelCenter = new JPanel();
 		panelCenter.setLayout(layout);
 
-		GridBagConstraints constraints = new GridBagConstraints();
-
 		labelNome = new JLabel("Nome: ");
 		labelIdade = new JLabel("Idade: ");
 
 		initTextFields();
-		
-		buttonAdicionarPessoa = new JButton("Adicionar");
+		initButton();
 
-		// 
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.anchor = GridBagConstraints.WEST;
-		layout.setConstraints(labelNome, constraints);
-		panelCenter.add(labelNome);
-		// 
+		addComponent(labelNome, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0);
 
-		// 
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 1;
-		layout.setConstraints(textFieldNome, constraints);
-		panelCenter.add(textFieldNome);
-		// 
+		addComponent(textFieldNome, GridBagConstraints.CENTER, GridBagConstraints.BOTH, GridBagConstraints.REMAINDER, 1);
 
-		// 
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.anchor = GridBagConstraints.WEST;
-		constraints.insets = new Insets(15, 0, 0, 0);
-		layout.setConstraints(labelIdade, constraints);
-		panelCenter.add(labelIdade);
-		// 
-		
-		// 
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 1;
-		constraints.insets = new Insets(0, 0, 0, 0);
-		layout.setConstraints(textFieldIdade, constraints);
-		panelCenter.add(textFieldIdade);
-		// 
+		addComponent(labelIdade, GridBagConstraints.WEST, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0, new Insets(15, 0, 0, 0));
+	
+		addComponent(textFieldIdade, GridBagConstraints.CENTER, GridBagConstraints.BOTH, GridBagConstraints.REMAINDER, 1, new Insets(0, 0, 0, 0));
 
-		// ´
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.weightx = 0;
-		constraints.insets = new Insets(15, 0, 0, 0);
-		layout.setConstraints(buttonAdicionarPessoa, constraints);
-		panelCenter.add(buttonAdicionarPessoa);
-		// 
-
-		//panelCenter.add(buttonAdicionarPessoa);
+		addComponent(buttonPessoa, GridBagConstraints.CENTER, GridBagConstraints.NONE, GridBagConstraints.REMAINDER, 0, new Insets(15, 0, 0, 0));
 
 		add(Box.createHorizontalStrut(40));
 		add(panelCenter);
 		add(Box.createHorizontalStrut(40));
 	}
 
-	public void initTextFields()
+	public void addComponent(Component component, int anchor, int fill, int gridwidth, int weightx)
 	{
-		textFieldNome = new JTextField(6);
-		textFieldIdade = new JTextField(6);
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.anchor = anchor;
+		constraints.fill = fill;
+		constraints.gridwidth = gridwidth;
+		constraints.weightx = weightx;
+
+		GridBagLayout layout = (GridBagLayout) panelCenter.getLayout();
+		layout.setConstraints(component, constraints);
+		panelCenter.add(component);
 	}
+
+	public void addComponent(Component component, int anchor, int fill, int gridwidth, int weightx, Insets insets)
+	{
+		GridBagConstraints constraints = new GridBagConstraints();
+
+		constraints.anchor = anchor;
+		constraints.fill = fill;
+		constraints.gridwidth = gridwidth;
+		constraints.weightx = weightx;
+		constraints.insets = insets;
+
+		GridBagLayout layout = (GridBagLayout) panelCenter.getLayout();
+		layout.setConstraints(component, constraints);
+		panelCenter.add(component);
+	}
+
+	public abstract void initTextFields();
+
+	public abstract void initButton();
 
 	public void addListeners()
 	{
-		buttonAdicionarPessoa.addActionListener(new ActionListener() {
+		buttonPessoa.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
